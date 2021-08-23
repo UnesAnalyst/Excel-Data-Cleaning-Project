@@ -1,0 +1,47 @@
+
+This is log file describing in details, the cleaning process of "Nashville Housing Data" using Microsoft Excel.
+
+=========================================================
+===============  Cleaning PropertyAddress ===============
+=========================================================
+
+✔ Cleaning the PropertyAddress column and fill in the null values(empty cells)
+ After reviewing the ParcelID column it seems that there is duplicates values so we can use this columns as reference for empty cells in PropertyAddress, following those steps:
+ 1) We will create a VLOOKUP table in separate sheet containing ParcelID and PropertyAddress columns. 
+Then, We will filter out the PropertyAddress column to exclude empty cells in this sheet(ReferenceTable)
+ 2) Now, We will return to the main sheet(NashvilleHousingData), and filter in the PropertyAddress column to include just empty cells.
+Then we will use VLOOKUP function to fill in the empty cells of this column using this formula =VLOOKUP(ParcelID,ReferenceTable!$A$2:$B$56449,2,FALSE).
+
+✔ Then we extract the Adress from all PropertyAddress using this formula "=LEFT(D2,(FIND(",",D2,1)-1))"
+
+✔ Then we extract city from all PropertyAddress using this formula "=MID(SUBSTITUTE(PropertyAddress," ",""), FIND(",",SUBSTITUTE(PropertyAddress," ",""))+1,20)"
+
+*Note: We can add TRIM function to remove any extra spaces included in our cleaned columns.
+
+
+===============================================
+===============  Cleaning Date  ===============
+===============================================
+
+✔ Cleaning the SalesDate column by breaking it into 3 columns ( SalesYear, SalesMonth, SalesDay)
+✔ For SalesYear, I used the the Year function "=YEAR(SalesDate)"
+✔ For SalesMonth, I used the the TEXT function "=TEXT(SalesDate, "mmmm")"
+✔ For SalesDay, I used the the TEXT function "=TEXT(SalesDate, "dddd")"
+
+
+=======================================================
+===============  Cleaning SoldAsVacant  ===============
+=======================================================
+
+✔ The SoldAsVacant column contain 4 values (Yes, No, N, Y), We will clean the column to have just two values (Yes and No),
+ using this formula "=IF(SoldAsVacant="Y","Yes",IF(SoldAsVacant="N","No",SoldAsVacant))"
+
+
+======================================================================
+
+Finally, We get cleaned workbook containing the folowwing tables(sheets)
+ ✔ NashvilleHousingData Table with columns (UniqueID, ParcelID, LandUse, PropertyAddress, Adress, City, SaleDate, sales_year, sales_month, sales_day, SalePrice, LegalReference and SoldAsVacant)
+ ✔ ReferenceTable Table with columns (ParcelID, PropertyAddress) used as VlOOKUP table during cleaning process
+
+
+End.
